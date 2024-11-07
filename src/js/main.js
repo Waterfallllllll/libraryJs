@@ -1,3 +1,3 @@
 import "./lib/lib";
 
-$("div").show();
+$("div").addClass("hello");
