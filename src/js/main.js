@@ -1,3 +1,6 @@
 import "./lib/lib";
 
-$("div").addClass("hello");
+$("button").attr("src", "value");
+
+console.log($("button").attr("src"));
+

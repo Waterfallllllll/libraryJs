@@ -19,6 +19,11 @@ $.prototype.init = function (selector) {
   if (!selector) {
     return this;
   }
+  if (selector.tagName) {
+    this[0] = selector;
+    this.length = 1;
+    return this;
+  }
   Object.assign(this, document.querySelectorAll(selector));
   this.length = document.querySelectorAll(selector).length;
   return this;
@@ -42,10 +47,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core */ "./src/js/lib/core.js");
 /* harmony import */ var _modules_display__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/display */ "./src/js/lib/modules/display.js");
 /* harmony import */ var _modules_classes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/classes */ "./src/js/lib/modules/classes.js");
+/* harmony import */ var _modules_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/actions */ "./src/js/lib/modules/actions.js");
+/* harmony import */ var _modules_attributes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/attributes */ "./src/js/lib/modules/attributes.js");
+
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_core__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/***/ }),
+
+/***/ "./src/js/lib/modules/actions.js":
+/*!***************************************!*\
+  !*** ./src/js/lib/modules/actions.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.on = function (event, callback) {
+  if (!event || !callback) {
+    return this;
+  }
+  for (let i = 0; i < this.length; i++) {
+    this[i].addEventListener(event, callback);
+  }
+  return this;
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.off = function (event, callback) {
+  if (!event || !callback) {
+    return this;
+  }
+  for (let i = 0; i < this.length; i++) {
+    this[i].removeEventListener(event, callback);
+  }
+  return this;
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.click = function (callback) {
+  for (let i = 0; i < this.length; i++) {
+    if (callback) {
+      this[i].addEventListener("click", callback);
+    } else {
+      this[i].click();
+    }
+  }
+  return this;
+};
+
+/***/ }),
+
+/***/ "./src/js/lib/modules/attributes.js":
+/*!******************************************!*\
+  !*** ./src/js/lib/modules/attributes.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.attr = function (attribute, attributeValue) {
+  for (let i = 0; i < this.length; i++) {
+    if (attributeValue) {
+      this[i].setAttribute(attribute, attributeValue);
+    } else {
+      return this[i].getAttribute(attribute);
+    }
+  }
+};
 
 /***/ }),
 
@@ -60,8 +130,30 @@ __webpack_require__.r(__webpack_exports__);
 
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.addClass = function (...classes) {
   for (let i = 0; i < this.length; i++) {
+    if (!this[i].classList) {
+      continue;
+    }
     this[i].classList.add(...classes);
   }
+  return this;
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.removeClass = function (...classes) {
+  for (let i = 0; i < this.length; i++) {
+    if (!this[i].classList) {
+      continue;
+    }
+    this[i].classList.remove(...classes);
+  }
+  return this;
+};
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggleClass = function (className) {
+  for (let i = 0; i < this.length; i++) {
+    if (!this[i].classList) {
+      continue;
+    }
+    this[i].classList.toggle(className);
+  }
+  return this;
 };
 
 /***/ }),
@@ -80,7 +172,7 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.show = function () {
     if (!this[i].style) {
       continue;
     }
-    this[i].style.display = '';
+    this[i].style.display = "";
   }
   console.log(this);
   return this;
@@ -90,7 +182,7 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.hide = function () {
     if (!this[i].style) {
       continue;
     }
-    this[i].style.display = 'none';
+    this[i].style.display = "none";
   }
   return this;
 };
@@ -99,10 +191,10 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toggle = function () {
     if (!this[i].style) {
       continue;
     }
-    if (this[i].style.display === 'none') {
-      this[i].style.display = '';
+    if (this[i].style.display === "none") {
+      this[i].style.display = "";
     } else {
-      this[i].style.display = 'none';
+      this[i].style.display = "none";
     }
   }
   return this;
@@ -175,7 +267,8 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/lib */ "./src/js/lib/lib.js");
 
-$("div").addClass("hello");
+$("button").attr("src", "value");
+console.log($("button").attr("src"));
 })();
 
 /******/ })()
