@@ -1,6 +1,7 @@
 import "./lib/lib";
 
-$("button").attr("src", "value");
+const nameAttr = $("button").removeAttr("src");
 
-console.log($("button").attr("src"));
+// console.log(nameAttr);
 
+$("div").eq(2).toggleClass("active");
