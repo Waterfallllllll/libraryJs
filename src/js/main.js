@@ -1,4 +1,4 @@
 import "./lib/lib";
 
-console.log($("div").find(".some"));
 
+console.log($(".more").eq(0).siblings());
