@@ -1,4 +1,4 @@
 import "./lib/lib";
 
 
-console.log($(".more").eq(0).siblings());
+$("button").fadeIn(1000);
