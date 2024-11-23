@@ -1,7 +1,4 @@
 @import "./general/base";
 @import "./general/variables";
 @import "./general/typography";
-
-* {
-    color: $danger;
-}
+@import "./components/button.scss";
