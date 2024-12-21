@@ -32,7 +32,7 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.dropdown = function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
 
-_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.modal = function () {
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.modal = function (created) {
   for (let i = 0; i < this.length; i++) {
     const target = this[i].getAttribute("data-target");
     (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).click(e => {
@@ -40,22 +40,88 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.modal = function () {
       (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeIn(500);
       document.body.style.overflow = "hidden";
     });
-  }
-  const closeElements = document.querySelectorAll("[data-close]");
-  closeElements.forEach(elem => {
-    (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(elem).click(() => {
-      (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(".modal").fadeOut(500);
-      document.body.style.overflow = "";
+    const closeElements = document.querySelectorAll(`${target} [data-close]`);
+    closeElements.forEach(elem => {
+      (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(elem).click(() => {
+        (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeOut(500);
+        document.body.style.overflow = "";
+        if (created) {
+          document.querySelector(target).remove();
+        }
+      });
     });
-  });
-  (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(".modal").click(e => {
-    if (e.target.classList.contains("modal")) {
-      (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(".modal").fadeOut(500);
-      document.body.style.overflow = "";
-    }
-  });
+    (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).click(e => {
+      if (e.target.classList.contains("modal")) {
+        (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeOut(500);
+        document.body.style.overflow = "";
+        if (created) {
+          document.querySelector(target).remove();
+        }
+      }
+    });
+  }
 };
 (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])("[data-toggle='modal']").modal();
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.createModal = function ({
+  text,
+  btns
+} = {}) {
+  for (let i = 0; i < this.length; i++) {
+    let modal = document.createElement("div");
+    modal.classList.add("modal");
+    modal.setAttribute("id", this[i].getAttribute("data-target").slice(1));
+
+    // btns = {count: num, settings: [[text, classNames=[], close, cb]]}
+    const buttons = [];
+    for (let j = 0; j < btns.count; j++) {
+      let btn = document.createElement("button");
+      btn.classList.add("btn", ...btns.settings[j][1]);
+      btn.textContent = btns.settings[j][0];
+      if (btns.settings[j][2]) {
+        btn.setAttribute("data-close", "true");
+      }
+      if (btns.settings[j][3] && typeof btns.settings[j][3] === "function") {
+        btn.addEventListener("click", btns.settings[j][3]);
+      }
+      buttons.push(btn);
+    }
+    modal.innerHTML = ` 
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<button class="close" data-close>
+						<span>&times;</span>
+					</button>
+					<div class="modal-header">
+						<div class="modal-title">
+							${text.title}
+						</div>
+					</div>
+					<div class="modal-body">
+						${text.body}
+					</div>
+					<div class="modal-footer">
+						
+					</div>
+				</div>
+			</div>
+		`;
+    modal.querySelector(".modal-footer").append(...buttons);
+    document.body.appendChild(modal);
+    (0,_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).modal(true);
+  }
+};
+
+/***/ }),
+
+/***/ "./src/js/lib/components/tab.js":
+/*!**************************************!*\
+  !*** ./src/js/lib/components/tab.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
 
 /***/ }),
 
@@ -110,6 +176,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_effects__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/effects */ "./src/js/lib/modules/effects.js");
 /* harmony import */ var _components_dropdown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/dropdown */ "./src/js/lib/components/dropdown.js");
 /* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/modal */ "./src/js/lib/components/modal.js");
+/* harmony import */ var _components_tab__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/tab */ "./src/js/lib/components/tab.js");
+
 
 
 
@@ -524,6 +592,18 @@ $("[data-count='second']").on("click", () => {
 $("button").eq(2).on("click", () => {
   $(".w-500").fadeToggle(800);
 });
+$("#trigger").click(() => $("#trigger").createModal({
+  text: {
+    title: "Modal title",
+    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi explicabo, autem a earum quae tempore eum, veniam possimus fugit dolorum repellat laboriosam. Dolorum eos illo, numquam enim ipsa suscipit maxime!"
+  },
+  btns: {
+    count: 2,
+    settings: [["Close", ["btn-danger", "mr-10"], true], ["Save changes", ["btn-success"], false, () => {
+      alert("Данные сохранены");
+    }]]
+  }
+}));
 })();
 
 /******/ })()
